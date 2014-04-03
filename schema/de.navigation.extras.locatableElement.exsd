@@ -1,0 +1,144 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!-- Schema file written by PDE -->
+<schema targetNamespace="de.navigation.extras" xmlns="http://www.w3.org/2001/XMLSchema">
+<annotation>
+      <appinfo>
+         <meta.schema plugin="de.navigation.extras" id="de.navigation.extras.locatableElement" name="Locator"/>
+      </appinfo>
+      <documentation>
+         The Locator extension point is a mechanism to allow the locationing of arbitrary elements from the Eclipse workbench in the file system (of the operation system).
+For supported elements, the context menu entries &quot;Open File Location&quot; and &quot;Copy File Location to Clipboard&quot; will be available, and the implementors routine will be used to locate the elements in the operation systems file system to provide the functions.&lt;br&gt;&lt;br&gt;
+
+As an example, the element type &quot;IResource&quot; can be easily located via &quot;IResource.getLocation().toFile()&quot;. Thus, in Eclipse, all elements that can be adapted to &quot;IResource&quot;, can be located in the file system via the context menu (popup menu).
+      </documentation>
+   </annotation>
+
+   <element name="extension">
+      <annotation>
+         <appinfo>
+            <meta.element />
+         </appinfo>
+      </annotation>
+      <complexType>
+         <choice>
+            <element ref="Locator" minOccurs="1" maxOccurs="unbounded"/>
+         </choice>
+         <attribute name="point" type="string" use="required">
+            <annotation>
+               <documentation>
+                  
+               </documentation>
+            </annotation>
+         </attribute>
+         <attribute name="id" type="string">
+            <annotation>
+               <documentation>
+                  
+               </documentation>
+            </annotation>
+         </attribute>
+         <attribute name="name" type="string">
+            <annotation>
+               <documentation>
+                  
+               </documentation>
+               <appinfo>
+                  <meta.attribute translatable="true"/>
+               </appinfo>
+            </annotation>
+         </attribute>
+      </complexType>
+   </element>
+
+   <element name="Locator">
+      <annotation>
+         <documentation>
+            This element defines a locationing implementation for a specified element type. Elements (IAdaptable), which can be adapted to the specified element types, will be handled by the specified locationing routine.
+         </documentation>
+      </annotation>
+      <complexType>
+         <attribute name="Name" type="string">
+            <annotation>
+               <documentation>
+                  The name of the Locator (for human readability).
+               </documentation>
+            </annotation>
+         </attribute>
+         <attribute name="Type" type="string" use="required">
+            <annotation>
+               <documentation>
+                  The element type, that is locatable by this contribution.
+               </documentation>
+               <appinfo>
+                  <meta.attribute kind="java" basedOn="java.lang.Object:"/>
+               </appinfo>
+            </annotation>
+         </attribute>
+         <attribute name="Locator" type="string" use="required">
+            <annotation>
+               <documentation>
+                  The implementation that locates the supported element type.
+               </documentation>
+               <appinfo>
+                  <meta.attribute kind="java" basedOn=":de.navigation.extras.extension.ILocator"/>
+               </appinfo>
+            </annotation>
+         </attribute>
+      </complexType>
+   </element>
+
+   <annotation>
+      <appinfo>
+         <meta.section type="since"/>
+      </appinfo>
+      <documentation>
+         3.6
+      </documentation>
+   </annotation>
+
+   <annotation>
+      <appinfo>
+         <meta.section type="examples"/>
+      </appinfo>
+      <documentation>
+         In this example, two locationing routines are specified.
+
+&lt;extension
+      point=&quot;de.navigation.extras.locator&quot;&gt;
+   &lt;Locator
+         Locator=&quot;de.navigation.extras.locators.IResourceLocator&quot;
+         Name=&quot;IResource Locator&quot;
+         Type=&quot;org.eclipse.core.resources.IResource&quot;&gt;
+   &lt;/Locator&gt;
+   &lt;Locator
+         Locator=&quot;de.navigation.extras.locators.IPackageFragmentRootLocator&quot;
+         Name=&quot;JarLocator&quot;
+         Type=&quot;org.eclipse.jdt.core.IPackageFragmentRoot&quot;&gt;
+   &lt;/Locator&gt;
+&lt;/extension&gt;
+
+The first Locator handles elements, which are adaptable to &quot;IResource&quot; and specifies the locator class &quot;IResourceLocator&quot; for the handling of such elements.
+The second Locator handles elements of type &quot;IPackageFragmentRoot&quot;, which for instance can be found in the &quot;Referenced Libraries&quot; listing in the &quot;Package Explorer&quot; for Java Projects.
+      </documentation>
+   </annotation>
+
+   <annotation>
+      <appinfo>
+         <meta.section type="apiinfo"/>
+      </appinfo>
+      <documentation>
+         Locator routines must implement the &quot;de.navigation.extras.extension.ILocator&quot; interface. In the method &quot;ILocator.locate(...)&quot; they receive the object, on which the popup menu action was called. This object must be adapted to the type, to which the locator was registered to. The adaption and type cast to the target type &lt;b&gt;may&lt;/b&gt; be performed without safety checking, however a typecheck &lt;b&gt;should&lt;/b&gt; be performed.
+      </documentation>
+   </annotation>
+
+
+   <annotation>
+      <appinfo>
+         <meta.section type="copyright"/>
+      </appinfo>
+      <documentation>
+         Janos Kutscherauer, May 2011
+      </documentation>
+   </annotation>
+
+</schema>
